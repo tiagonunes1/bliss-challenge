@@ -34,7 +34,14 @@ function ListScreen({ searchParam }) {
   }, [searchParam]);
 
   const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
+    const newFilterValue = event.target.value;
+    setSearchQuery(newFilterValue);
+
+    const newUrl = new URL(window.location.href);
+    const urlParams = new URLSearchParams(newUrl.search);
+    urlParams.set("filter", newFilterValue);
+
+    window.history.replaceState({}, "", `${newUrl.pathname}?${urlParams}`);
   };
 
   const loadMore = () => {
@@ -47,6 +54,25 @@ function ListScreen({ searchParam }) {
     setOffset((prevOffset) => prevOffset + 10);
   };
 
+  const shareScreen = (data) => {
+    const currentUrl = window.location.href;
+    const apiUrl = `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/share?destination_email=tiagoalexandrenunes1@gmail.com&content_url=${currentUrl}`;
+    fetch(apiUrl, {
+      method: "POST",
+      body: data,
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Screen share was successful");
+        } else {
+          console.error("Screen share failed");
+        }
+      })
+      .catch((error) => {
+        console.error("Network error:", error);
+      });
+  };
+
   const filteredQuestions = questionList.filter((question) =>
     question.question.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -54,6 +80,9 @@ function ListScreen({ searchParam }) {
   return (
     <div className="list">
       <h2>Question List</h2>
+      <button className="share-screen-button" onClick={shareScreen}>
+        Share Screen
+      </button>
       <div className="search-bar-container">
         <input
           type="text"
@@ -95,7 +124,7 @@ function ListScreen({ searchParam }) {
               </td>
               <td>
                 <button className="share-button" onClick={shareQuestion}>
-                  Share
+                  Share Question
                 </button>
               </td>
             </tr>
