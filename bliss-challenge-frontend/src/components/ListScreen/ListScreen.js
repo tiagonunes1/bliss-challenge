@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./ListScreen.css";
 
 function ListScreen({ searchParam }) {
   const [questionList, setQuestionList] = useState([]);
   const [searchQuery, setSearchQuery] = useState(searchParam);
   const [offset, setOffset] = useState(0);
+  const searchInputRef = useRef(null);
 
   useEffect(() => {
     fetch(
@@ -24,7 +25,13 @@ function ListScreen({ searchParam }) {
       .catch((error) => {
         console.log(`Error: ${error}`);
       });
-  }, [offset, searchQuery]); // Removed searchParam from dependencies as it's already initialized
+  }, [offset, searchQuery]);
+
+  useEffect(() => {
+    if (!searchParam && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchParam]);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -55,6 +62,7 @@ function ListScreen({ searchParam }) {
           placeholder="Search questions..."
           value={searchQuery}
           onChange={handleSearchChange}
+          ref={searchInputRef}
         />
         <button
           id="searchButton"
