@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./ListScreen.css";
 
-function ListScreen() {
+function ListScreen({ searchParam }) {
   const [questionList, setQuestionList] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(searchParam);
   const [offset, setOffset] = useState(0);
 
   useEffect(() => {
     fetch(
-      `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/questions?limit=10&offset=${offset}&filter=${searchQuery}`
+      `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/questions?limit=10&offset=${offset}&filter=${encodeURIComponent(
+        searchQuery
+      )}`
     )
       .then((response) => {
         const isResponseOK = response.ok;
@@ -22,11 +24,10 @@ function ListScreen() {
       .catch((error) => {
         console.log(`Error: ${error}`);
       });
-  }, [offset, searchQuery]);
+  }, [offset, searchQuery]); // Removed searchParam from dependencies as it's already initialized
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
-    console.log(searchQuery);
   };
 
   const loadMore = () => {
@@ -79,8 +80,16 @@ function ListScreen() {
               <td>{question.id}</td>
               <td>{question.question}</td>
               <td>{new Date(question.published_at).toLocaleString()}</td>
-              <td><button className="detail-button" onClick={openDetail}>Detail</button></td>
-              <td><button className="share-button" onClick={shareQuestion}>Share</button></td>
+              <td>
+                <button className="detail-button" onClick={openDetail}>
+                  Detail
+                </button>
+              </td>
+              <td>
+                <button className="share-button" onClick={shareQuestion}>
+                  Share
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

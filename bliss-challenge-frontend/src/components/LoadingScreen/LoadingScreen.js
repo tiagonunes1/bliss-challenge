@@ -4,10 +4,29 @@ import ListScreen from "../ListScreen/ListScreen";
 
 function LoadingScreen() {
   const [loadingMessage, setLoadingMessage] = useState("Loading...");
+  const [searchParam, setSearchParam] = useState("");
   const [isResponseOK, setIsResponseOK] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const isFilterParamPresent = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.has("filter");
+  };
   useEffect(() => {
+    const getFilterValue = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has("filter")) {
+        return urlParams.get("filter");
+      } else {
+        return null;
+      }
+    };
+
+    if (isFilterParamPresent()) {
+      const filterValue = getFilterValue();
+      setSearchParam(filterValue);
+      setIsLoading(false);
+    }
     fetch("https://private-bbbe9-blissrecruitmentapi.apiary-mock.com/health")
       .then((response) => {
         const isResponseOK = response.ok;
@@ -29,7 +48,7 @@ function LoadingScreen() {
       {isLoading ? (
         <div className="loading-spinner"></div>
       ) : isResponseOK ? (
-        <ListScreen />
+        <ListScreen searchParam={isFilterParamPresent() ? searchParam : ""} />
       ) : (
         <h2>{loadingMessage}</h2>
       )}
