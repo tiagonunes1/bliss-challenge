@@ -1,29 +1,65 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import "./DetailScreen.css";
 
 function DetailScreen() {
-  const { id } = useParams();
-  const location = useLocation();
-  //const question = location.state?.question;
+  const [question, setQuestion] = useState(null);
 
-  const image_url = location.state.image_url;
-  const thumb_url = location.state.thumb_url;
-  const question = location.state.question;
-  const published_at = location.state.published_at;
-  const choices = location.state.choices;
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchQuestion = async () => {
+      try {
+        const response = await fetch(
+          `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/questions/${id}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setQuestion(data);
+        } else {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }
+    };
+
+    fetchQuestion();
+  }, [id]);
+
+  function handleVoteClick(question) {
+    console.log(question);
+  }
 
   return (
     <div>
       <h2>Question Details</h2>
       <Link to="/listing">Back to Listing</Link>
-      <div>
-        <h3>Question:</h3>
+
+      <div className="poll-container">
         {question ? (
-          <div>
-            <p>ID: {id}</p>
-            <p>Question: {question}</p>
-            <p>Published At: {published_at}</p>
-          </div>
+          <>
+            <div className="poll-image">
+              <img src={question.image_url} alt="Poll Image" />
+            </div>
+            <div className="poll-title">
+              <h1>{question.question}</h1>
+            </div>
+            <div className="poll-options">
+              {question.choices.map((choice, index) => (
+                <div key={index}>
+                  <p>Votes: <strong>{choice.votes}</strong></p> 
+                  <button
+                    key={index}
+                    className="poll-option-button"
+                    onClick={() => handleVoteClick(choice)}
+                  >
+                    {choice.choice}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </>
         ) : (
           <p>Question not found</p>
         )}
