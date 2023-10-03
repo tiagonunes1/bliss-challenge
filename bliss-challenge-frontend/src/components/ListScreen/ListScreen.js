@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./ListScreen.css";
+import DetailScreen from "../DetailScreen/DetailScreen";
 
 function ListScreen({ searchParam }) {
   const [questionList, setQuestionList] = useState([]);
   const [searchQuery, setSearchQuery] = useState(searchParam);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [offset, setOffset] = useState(0);
   const searchInputRef = useRef(null);
 
@@ -33,16 +35,18 @@ function ListScreen({ searchParam }) {
     }
   }, [searchParam]);
 
-  const handleSearchChange = (event) => {
-    const newFilterValue = event.target.value;
-    setSearchQuery(newFilterValue);
+const handleSearchChange = (e) => {
+  const filter = e.target.value;
+  setSearchQuery(filter);
 
-    const newUrl = new URL(window.location.href);
-    const urlParams = new URLSearchParams(newUrl.search);
-    urlParams.set("filter", newFilterValue);
+  const { search, pathname } = window.location;
+  const urlParams = new URLSearchParams(search);
+  urlParams.set("filter", filter);
 
-    window.history.replaceState({}, "", `${newUrl.pathname}?${urlParams}`);
-  };
+  const newUrl = `${pathname}?${urlParams}`;
+
+  window.history.replaceState({}, "", newUrl);
+};
 
   const loadMore = () => {
     setOffset((prevOffset) => prevOffset + 10);
@@ -54,33 +58,36 @@ function ListScreen({ searchParam }) {
     setOffset((prevOffset) => prevOffset + 10);
   };
 
-  const shareScreen = (data) => {
+const sendScreenShareRequest = async () => {
+  try {
     const currentUrl = window.location.href;
     const apiUrl = `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/share?destination_email=tiagoalexandrenunes1@gmail.com&content_url=${currentUrl}`;
-    fetch(apiUrl, {
+
+    const response = await fetch(apiUrl, {
       method: "POST",
-      body: data,
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.log("Screen share was successful");
-        } else {
-          console.error("Screen share failed");
-        }
-      })
-      .catch((error) => {
-        console.error("Network error:", error);
-      });
-  };
+    });
+
+    if (response.ok) {
+      console.log("Screen share was successful");
+    } else {
+      console.error("Screen share failed");
+    }
+  } catch (error) {
+    console.error("Network error:", error);
+  }
+};
 
   const filteredQuestions = questionList.filter((question) =>
     question.question.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleRowClick = (question) => {
+    setSelectedQuestion(question);
+  };
   return (
     <div className="list">
       <h2>Question List</h2>
-      <button className="share-screen-button" onClick={shareScreen}>
+      <button className="share-screen-button" onClick={sendScreenShareRequest}>
         Share Screen
       </button>
       <div className="search-bar-container">
@@ -113,7 +120,7 @@ function ListScreen({ searchParam }) {
         </thead>
         <tbody>
           {filteredQuestions.map((question, index) => (
-            <tr key={index}>
+            <tr key={index} onClick={() => handleRowClick(question)}>
               <td>{question.id}</td>
               <td>{question.question}</td>
               <td>{new Date(question.published_at).toLocaleString()}</td>
@@ -135,6 +142,7 @@ function ListScreen({ searchParam }) {
       <button className="load-more-button" onClick={loadMore}>
         Load More
       </button>
+      {selectedQuestion && <DetailScreen question={selectedQuestion} />}
     </div>
   );
 }

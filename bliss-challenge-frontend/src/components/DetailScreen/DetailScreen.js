@@ -1,29 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-function DetailScreen() {
-  const [questionDetail, setQuestionDetail] = useState([]);
-
-  useEffect(() => {
-    fetch(
-      `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/questions/`
-    )
-      .then((response) => {
-        const isResponseOK = response.ok;
-        return isResponseOK
-          ? response.json
-          : Promise.reject(new Error(`HTTP Error: ${response.status}`));
-      })
-      .then((data) => {
-        setQuestionDetail(data);
-      })
-      .catch((error) => {
-        console.log(`Error: ${error}`);
-      });
-  });
+function DetailScreen({ question }) {
   return (
-  <div className="detail-container">
-    
-  </div>
+    <div>
+      <h2>{question.question}</h2>
+      <p>ID: {question.id}</p>
+      <p>Question: {question.question}</p>
+      <p>Published At: {new Date(question.published_at).toLocaleString()}</p>
+    </div>
   );
 }
 
