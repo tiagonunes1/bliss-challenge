@@ -10,23 +10,24 @@ function ListScreen({ searchParam }) {
   const searchInputRef = useRef(null);
 
   useEffect(() => {
-    fetch(
-      `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/questions?limit=10&offset=${offset}&filter=${encodeURIComponent(
-        searchQuery
-      )}`
-    )
-      .then((response) => {
-        const isResponseOK = response.ok;
-        return isResponseOK
-          ? response.json()
-          : Promise.reject(new Error(`HTTP Error: ${response.status}`));
-      })
-      .then((data) => {
-        setQuestionList(data);
-      })
-      .catch((error) => {
+    const fetchQuestions = async () => {
+      try {
+        const response = await fetch(
+          `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/questions?limit=10&offset=${offset}&filter=${encodeURIComponent(searchQuery)}`
+        );
+        
+        if (response.ok) {
+          const data = await response.json();
+          setQuestionList(data);
+        } else {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+      } catch (error) {
         console.log(`Error: ${error}`);
-      });
+      }
+    };
+
+    fetchQuestions();
   }, [offset, searchQuery]);
 
   useEffect(() => {
@@ -35,55 +36,57 @@ function ListScreen({ searchParam }) {
     }
   }, [searchParam]);
 
-const handleSearchChange = (e) => {
-  const filter = e.target.value;
-  setSearchQuery(filter);
+  const handleSearchChange = (e) => {
+    const filter = e.target.value;
+    setSearchQuery(filter);
 
-  const { search, pathname } = window.location;
-  const urlParams = new URLSearchParams(search);
-  urlParams.set("filter", filter);
+    const { search, pathname } = window.location;
+    const urlParams = new URLSearchParams(search);
+    urlParams.set("filter", filter);
 
-  const newUrl = `${pathname}?${urlParams}`;
+    const newUrl = `${pathname}?${urlParams}`;
 
-  window.history.replaceState({}, "", newUrl);
-};
+    window.history.replaceState({}, "", newUrl);
+  };
 
   const loadMore = () => {
     setOffset((prevOffset) => prevOffset + 10);
   };
+  
   const openDetail = () => {
-    setOffset((prevOffset) => prevOffset + 10);
+    // TODO: Implement openDetail functionality
   };
   const shareQuestion = () => {
-    setOffset((prevOffset) => prevOffset + 10);
+    // TODO: Implement openDetail functionality
   };
 
-const sendScreenShareRequest = async () => {
-  try {
-    const currentUrl = window.location.href;
-    const apiUrl = `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/share?destination_email=tiagoalexandrenunes1@gmail.com&content_url=${currentUrl}`;
+  const sendScreenShareRequest = async () => {
+    try {
+      const currentUrl = window.location.href;
+      const apiUrl = `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/share?destination_email=tiagoalexandrenunes1@gmail.com&content_url=${currentUrl}`;
 
-    const response = await fetch(apiUrl, {
-      method: "POST",
-    });
+      const response = await fetch(apiUrl, {
+        method: "POST",
+      });
 
-    if (response.ok) {
-      console.log("Screen share was successful");
-    } else {
-      console.error("Screen share failed");
+      if (response.ok) {
+        console.log("Screen share was successful");
+      } else {
+        console.error("Screen share failed");
+      }
+    } catch (error) {
+      console.error("Network error:", error);
     }
-  } catch (error) {
-    console.error("Network error:", error);
-  }
-};
+  };
 
   const filteredQuestions = questionList.filter((question) =>
     question.question.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleRowClick = (question) => {
-    setSelectedQuestion(question);
+  const handleRowClick = (selectedQuestion) => {
+    setSelectedQuestion(selectedQuestion);
   };
+
   return (
     <div className="list">
       <h2>Question List</h2>
@@ -120,7 +123,7 @@ const sendScreenShareRequest = async () => {
         </thead>
         <tbody>
           {filteredQuestions.map((question, index) => (
-            <tr key={index} onClick={() => handleRowClick(question)}>
+            <tr key={index} onClick={() => handleRowClick(selectedQuestion)}>
               <td>{question.id}</td>
               <td>{question.question}</td>
               <td>{new Date(question.published_at).toLocaleString()}</td>
