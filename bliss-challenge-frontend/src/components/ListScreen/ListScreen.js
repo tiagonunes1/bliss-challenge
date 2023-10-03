@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./ListScreen.css";
 import DetailScreen from "../DetailScreen/DetailScreen";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function ListScreen({ searchParam }) {
   const [questionList, setQuestionList] = useState([]);
@@ -8,14 +10,17 @@ function ListScreen({ searchParam }) {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [offset, setOffset] = useState(0);
   const searchInputRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
         const response = await fetch(
-          `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/questions?limit=10&offset=${offset}&filter=${encodeURIComponent(searchQuery)}`
+          `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/questions?limit=10&offset=${offset}&filter=${encodeURIComponent(
+            searchQuery
+          )}`
         );
-        
+
         if (response.ok) {
           const data = await response.json();
           setQuestionList(data);
@@ -52,12 +57,9 @@ function ListScreen({ searchParam }) {
   const loadMore = () => {
     setOffset((prevOffset) => prevOffset + 10);
   };
-  
-  const openDetail = () => {
-    // TODO: Implement openDetail functionality
-  };
+
   const shareQuestion = () => {
-    // TODO: Implement openDetail functionality
+    // TODO: Implement shareQuestion functionality
   };
 
   const sendScreenShareRequest = async () => {
@@ -86,6 +88,13 @@ function ListScreen({ searchParam }) {
   const handleRowClick = (selectedQuestion) => {
     setSelectedQuestion(selectedQuestion);
   };
+
+  const data = { foo: "bar" };
+
+  function handleClickDetail(question) {
+    console.log(question);
+    navigate(`/questions/${question.id}`, { state: question });
+  }
 
   return (
     <div className="list">
@@ -128,7 +137,7 @@ function ListScreen({ searchParam }) {
               <td>{question.question}</td>
               <td>{new Date(question.published_at).toLocaleString()}</td>
               <td>
-                <button className="detail-button" onClick={openDetail}>
+                <button onClick={() => handleClickDetail(question)}>
                   Detail
                 </button>
               </td>
