@@ -1,11 +1,36 @@
-import React, { useEffect, useState } from "react";
-import NetworkStatus, { Offline, Online } from "react-network-status";
+import React, { useState, useEffect } from "react";
+import LoadingScreen from "../LoadingScreen/LoadingScreen";
 
 function NoConnectivityScreen() {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  const handleNetworkChange = () => {
+    setIsOnline(navigator.onLine);
+  };
+
+  useEffect(() => {
+    window.addEventListener("online", handleNetworkChange);
+    window.addEventListener("offline", handleNetworkChange);
+
+    return () => {
+      window.removeEventListener("online", handleNetworkChange);
+      window.removeEventListener("offline", handleNetworkChange);
+    };
+  }, []);
+
   return (
-    <div>
-      <h1>TESTE</h1>
-    </div>
+    <>
+      {!isOnline ? (
+        <div className="no-connectivity-screen">
+          <p>
+            You are currently offline. Please check your internet connection.
+          </p>
+        </div>
+      ) : (
+        ""
+      )}
+    </>
   );
 }
+
 export default NoConnectivityScreen;

@@ -4,7 +4,7 @@ body {
 }
 
 .poll-container {
-  max-width: 600px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -56,9 +56,30 @@ body {
 }
 
 img {
+  max-width: 100%;
+  height: auto;
   border-radius: 10px;
 }
 
-.share-button{
-    margin-top: 50px;
+.share-button-detail {
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .poll-container {
+    padding: 10px;
+  }
+
+  .poll-title {
+    font-size: 20px;
+  }
+
+  .poll-option-button {
+    padding: 5px 10px;
+    margin: 5px;
+  }
+
+  .share-button-detail {
+    margin-top: 10px;
+  }
 }

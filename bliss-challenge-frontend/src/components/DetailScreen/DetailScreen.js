@@ -101,7 +101,7 @@ function DetailScreen() {
               ))}
             </div>
             <div>
-              <button className="share-button" onClick={() => sendShare()}>
+              <button className="share-button-detail" onClick={() => sendShare()}>
                 Share
               </button>
             </div>

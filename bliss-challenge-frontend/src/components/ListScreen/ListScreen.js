@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./ListScreen.css";
 import DetailScreen from "../DetailScreen/DetailScreen";
+import QuestionCard from "../QuestionCard/QuestionCard";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -92,7 +93,6 @@ function ListScreen({ searchParam }) {
   const data = { foo: "bar" };
 
   function handleClickDetail(question) {
-    console.log(question);
     navigate(`/questions/${question.id}`, { state: question });
   }
 
@@ -120,36 +120,16 @@ function ListScreen({ searchParam }) {
           Search
         </button>
       </div>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Question</th>
-            <th>Published</th>
-            <th>Detail</th>
-            <th>Share</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredQuestions.map((question, index) => (
-            <tr key={index} onClick={() => handleRowClick(selectedQuestion)}>
-              <td>{question.id}</td>
-              <td>{question.question}</td>
-              <td>{new Date(question.published_at).toLocaleString()}</td>
-              <td>
-                <button onClick={() => handleClickDetail(question)}>
-                  Detail
-                </button>
-              </td>
-              <td>
-                <button className="share-button" onClick={shareQuestion}>
-                  Share Question
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="horizontal-cards-container">
+        {filteredQuestions.map((question, index) => (
+          <QuestionCard
+            key={index}
+            question={question}
+            onClickDetail={handleClickDetail}
+            onShareQuestion={shareQuestion}
+          />
+        ))}
+      </div>
 
       <button className="load-more-button" onClick={loadMore}>
         Load More
