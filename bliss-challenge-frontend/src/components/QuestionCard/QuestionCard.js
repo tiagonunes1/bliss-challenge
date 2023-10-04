@@ -2,11 +2,11 @@ import React from "react";
 
 function QuestionCard({ question, onClickDetail, onShareQuestion }) {
   return (
-    <div className="question-card">
+    <div onClick={() => onClickDetail(question)} className="question-card">
       <h3>{question.question}</h3>
       <p>ID: {question.id}</p>
       <p>Published: {new Date(question.published_at).toLocaleString()}</p>
-      <button onClick={() => onClickDetail(question)}>
+      <button className="card-detail" onClick={() => onClickDetail(question)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="15"
@@ -25,14 +25,14 @@ function QuestionCard({ question, onClickDetail, onShareQuestion }) {
         </svg>
         &nbsp;Detail
       </button>
-      <button onClick={() => onShareQuestion(question)}>
+      <button className="card-share" onClick={() => onShareQuestion(question)}>
         {" "}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           width="15"
           height="15"
-          class="main-grid-item-icon"
+          className="main-grid-item-icon"
           fill="none"
           stroke="currentColor"
           strokeLinecap="round"

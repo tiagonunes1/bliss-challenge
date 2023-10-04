@@ -1,24 +1,34 @@
+/* Import the font */
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
 
+/* Set the font for the entire body */
 body {
   font-family: "Open Sans", sans-serif;
+  margin: 0; /* Remove default margin to ensure consistent spacing */
+  padding: 0; /* Remove default padding */
 }
 
+/* Center align the content within the .App container */
 .App {
   text-align: center;
 }
 
+/* Define styles for the logo */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+  /* Add a smooth animation with reduced motion preference check */
+  animation: App-logo-spin infinite 20s linear;
 }
 
+/* Apply the animation only when reduced motion is not preferred */
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
 
+/* Define styles for the header */
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -30,10 +40,13 @@ body {
   color: white;
 }
 
+/* Define styles for hyperlinks */
 .App-link {
   color: #61dafb;
+  text-decoration: none; /* Remove default underline for links */
 }
 
+/* Define the spin animation for the logo */
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -43,6 +56,7 @@ body {
   }
 }
 
+/* Apply responsive styles for smaller screens */
 @media (max-width: 768px) {
   .App-logo {
     height: 30vmin;

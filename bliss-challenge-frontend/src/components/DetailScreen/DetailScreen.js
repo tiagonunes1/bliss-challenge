@@ -4,12 +4,11 @@ import "./DetailScreen.css";
 
 function DetailScreen() {
   const [question, setQuestion] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
   const fetchQuestion = async () => {
     try {
-      setLoading(true);
       const response = await fetch(
         `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/questions/${id}`
       );
@@ -39,7 +38,6 @@ function DetailScreen() {
       });
 
       if (response.ok) {
-        console.log("Vote was successful");
         fetchQuestion();
       } else {
         console.error("Vote failed");
@@ -69,45 +67,48 @@ function DetailScreen() {
   };
 
   return (
-    <div>
+    <div className="detail-container">
       <h2>Question Details</h2>
-      <Link to="/">Back to Listing</Link>
+      <Link to="/" className="back-link">
+        Back to Listing
+      </Link>
 
       <div className="poll-container">
         {loading ? (
-          <p>Loading...</p>
+          <div className="loading-container">
+            <p>Loading...</p>
+          </div>
         ) : question ? (
           <>
             <div className="poll-image">
               <img src={question.image_url} alt="Poll Image" />
             </div>
-            <div className="poll-title">
-              <h1>{question.question}</h1>
+            <div className="poll-details">
+              <h1 className="poll-title">{question.question}</h1>
+              <div className="poll-options">
+                {question.choices.map((choice, index) => (
+                  <div key={index} className="poll-option">
+                    <button
+                      key={index}
+                      className="poll-option-button"
+                      onClick={() => handleVoteClick(choice)}
+                    >
+                      {choice.choice}
+                    </button>
+                    <p className="votes-count">Votes: {choice.votes}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="poll-options">
-              {question.choices.map((choice, index) => (
-                <div key={index}>
-                  <p>
-                    Votes: <strong>{choice.votes}</strong>
-                  </p>
-                  <button
-                    key={index}
-                    className="poll-option-button"
-                    onClick={() => handleVoteClick(choice)}
-                  >
-                    {choice.choice}
-                  </button>
-                </div>
-              ))}
-            </div>
-            <div>
-              <button className="share-button-detail" onClick={() => sendShare()}>
-                Share
-              </button>
-            </div>
+            <button
+              className="share-button-detail"
+              onClick={() => sendShare()}
+            >
+              Share
+            </button>
           </>
         ) : (
-          <p>Question not found</p>
+          <p className="error-message">Question not found</p>
         )}
       </div>
     </div>

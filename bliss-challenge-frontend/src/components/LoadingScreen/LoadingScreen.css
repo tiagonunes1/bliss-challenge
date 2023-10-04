@@ -1,8 +1,10 @@
+/* Center and style the loading spinner */
 .loading-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  /* height: 100vh;  */
 }
 
 .loading-spinner {
@@ -21,4 +23,20 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.content-container {
+  /* max-height: 80vh;  */
+  overflow-y: auto; 
+}
+
+/* Styles for the content inside the container */
+.content {
+  padding: 20px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 24px;
+  margin-top: 20px;
 }

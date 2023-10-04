@@ -48,7 +48,9 @@ function LoadingScreen() {
       {isLoading ? (
         <div className="loading-spinner"></div>
       ) : isResponseOK ? (
-        <ListScreen searchParam={isFilterParamPresent() ? searchParam : ""} />
+        <div className="content-container">
+          <ListScreen searchParam={isFilterParamPresent() ? searchParam : ""} />
+        </div>
       ) : (
         <h2>{loadingMessage}</h2>
       )}
