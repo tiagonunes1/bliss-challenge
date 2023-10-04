@@ -100,6 +100,24 @@ function ListScreen({ searchParam }) {
     <div className="list">
       <h2>Question List</h2>
       <button className="share-screen-button" onClick={sendScreenShareRequest}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="feather feather-share" 
+        >
+          <circle cx="18" cy="5" r="3" />
+          <circle cx="6" cy="12" r="3" />
+          <circle cx="18" cy="19" r="3" />
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+        </svg>&nbsp;
         Share Screen
       </button>
       <div className="search-bar-container">
@@ -117,7 +135,22 @@ function ListScreen({ searchParam }) {
           className="search-button"
           onClick={handleSearchChange}
         >
-          Search
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="feather feather-search"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          &nbsp;Search
         </button>
       </div>
       <div className="horizontal-cards-container">

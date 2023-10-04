@@ -1,30 +1,93 @@
-.container {
+.list {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  text-align: center;
 }
 
-.search-bar {
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.search-bar-container {
+  display: flex;
+  align-items: center;
   margin-bottom: 20px;
 }
 
-.table-container {
-  overflow-x: auto;
+.search-bar {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+}
+
+.search-button {
+  padding: 10px 20px;
+  margin-left: 1px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  vertical-align: middle; /* Add this line to vertically align the button */
+}
+
+
+.horizontal-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.question-card {
+  flex: 0 0 calc(33.33% - 10px);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: transform 0.2s ease-in-out;
+}
+
+.question-card:hover {
+  transform: scale(1.05);
+}
+
+.load-more-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .share-screen-button {
   position: absolute;
-  top: 0;
-  right: 0;
-  margin: 10px;
+  top: 10px; /* Adjust top position */
+  right: 10px; /* Adjust right position */
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.load-more-button {
-  margin-top: 30px;
-}
 
 @media (max-width: 768px) {
-  .container {
+  .list {
     padding: 10px;
   }
 
@@ -39,22 +102,8 @@
   .load-more-button {
     margin-top: 20px;
   }
-}
 
-.horizontal-cards-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 50px 100px;
-
-}
-
-.question-card {
-  flex: 1;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px;
-  margin: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  .question-card {
+    flex: 0 0 calc(50% - 10px);
+  }
 }

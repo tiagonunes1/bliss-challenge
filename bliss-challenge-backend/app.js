@@ -14,15 +14,15 @@ app.post("/share", (req, res) => {
     port: 2525,
     auth: {
       user: "6d7c97bd727cb4",
-      pass: "813e8cf8f3c0b6",
+      pass: "83721964",
     },
   });
 
   const mailOptions = {
-    from: "",
-    to,
-    subject,
-    text,
+    from: "f642452c8a-2c26b6+1@inbox.mailtrap.io",
+    to: "tiagonunes.63.gpsi@gmail.com",
+    subject: "Page share",
+    text: "This is the email body text.",
   };
 
   transporter.sendMail(mailOptions, (err, info) => {
