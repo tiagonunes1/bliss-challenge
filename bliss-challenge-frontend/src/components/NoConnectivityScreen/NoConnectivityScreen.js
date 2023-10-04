@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import LoadingScreen from "../LoadingScreen/LoadingScreen";
+import "./NoConnectivityScreen.css";
 
 function NoConnectivityScreen() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -22,7 +22,7 @@ function NoConnectivityScreen() {
     <>
       {!isOnline ? (
         <div className="no-connectivity-screen">
-          <p>
+          <p className="no-network">
             You are currently offline. Please check your internet connection.
           </p>
         </div>
