@@ -10,6 +10,8 @@ function ListScreen({ searchParam }) {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [offset, setOffset] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [emailInput, setEmailInput] = useState("");
   const searchInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -62,23 +64,46 @@ function ListScreen({ searchParam }) {
     setOffset((prevOffset) => prevOffset + 10);
   };
 
+  const openEmailModal = () => {
+    setShowEmailModal(true);
+  };
+
+  const closeEmailModal = () => {
+    setShowEmailModal(false);
+  };
+
   const shareRequest = async () => {
-    try {
-      const currentUrl = window.location.href;
-      const apiUrl = `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/share?destination_email=tiagoalexandrenunes1@gmail.com&content_url=${currentUrl}`;
+    // Check if email is valid before sending the request
+    if (validateEmail(emailInput)) {
+      try {
+        const currentUrl = window.location.href;
+        const apiUrl = `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/share?destination_email=${encodeURIComponent(
+          emailInput
+        )}&content_url=${currentUrl}`;
 
-      const response = await fetch(apiUrl, {
-        method: "POST",
-      });
+        const response = await fetch(apiUrl, {
+          method: "POST",
+        });
 
-      if (response.ok) {
-        console.log("Screen shared successfully");
-      } else {
-        console.error("Screen share failed");
+        if (response.ok) {
+          console.log("Screen shared successfully");
+          closeEmailModal();
+        } else {
+          console.error("Screen share failed");
+        }
+      } catch (error) {
+        console.error("Network error:", error);
       }
-    } catch (error) {
-      console.error("Network error:", error);
+    } else {
+      // Handle invalid email input, e.g., show an error message
+      console.error("Invalid email address");
     }
+  };
+
+  // Function to validate email format
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   const filteredQuestions = questionList.filter((question) =>
@@ -122,7 +147,7 @@ function ListScreen({ searchParam }) {
   return (
     <div className="list">
       <h2>Question List</h2>
-      <button className="share-screen-button" onClick={shareRequest}>
+      <button className="share-screen-button" onClick={openEmailModal}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="15"
@@ -143,6 +168,25 @@ function ListScreen({ searchParam }) {
         </svg>
         &nbsp; Share Screen
       </button>
+
+      {showEmailModal && (
+        <div className="email-modal">
+          <div className="email-modal-content">
+            <h3>Enter Email Address</h3>
+            <input
+              type="email"
+              placeholder="Email Address"
+              value={emailInput}
+              onChange={(e) => setEmailInput(e.target.value)}
+            />
+            <div className="email-modal-buttons">
+              <button onClick={shareRequest}>Share</button>
+              <button onClick={closeEmailModal}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="search-bar-container">
         <input
           type="text"
