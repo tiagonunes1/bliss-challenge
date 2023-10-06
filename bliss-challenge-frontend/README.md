@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+# Bliss Challenge Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the front-end portion of the Bliss Challenge project. It's a React-based web application that allows users to view and interact with questions and choices.
 
-## Available Scripts
 
-In the project directory, you can run:
+![Bliss Challenge app](https://i.imgur.com/9z47JaR.jpg)
 
-### `npm start`
+## Table of Contents
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+Follow the instructions below to get this project up and running on your local machine.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
 
-### `npm run build`
+- [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) (Node Package Manager) should be installed on your computer.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Installation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Clone the repository:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   ```sh
+   git clone https://github.com/tiagonunes1/bliss-challenge.git
+   cd bliss-challenge/bliss-challenge-frontend
 
-### `npm run eject`
+### Install the project dependencies:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```sh
+npm install
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Usage
+Once you have installed the project and its dependencies, you can run the front-end application with the following command:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```sh
+npm start
 
-## Learn More
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Project Structure
+Here's an overview of the project structure:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```sh 
+.
+├── README.md
+├── bliss-challenge-frontend
+│   ├── README.md
+│   ├── babel.config.js
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── public
+│   │   ├── favicon.ico
+│   │   ├── index.html
+│   │   ├── logo192.png
+│   │   ├── logo512.png
+│   │   ├── manifest.json
+│   │   └── robots.txt
+│   └── src
+│       ├── App.css
+│       ├── App.jsx
+│       ├── components
+│       │   ├── DetailScreen
+│       │   │   ├── DetailScreen.css
+│       │   │   └── DetailScreen.js
+│       │   ├── ListScreen
+│       │   │   ├── ListScreen.css
+│       │   │   └── ListScreen.js
+│       │   ├── LoadingScreen
+│       │   │   ├── LoadingScreen.css
+│       │   │   └── LoadingScreen.js
+│       │   ├── NoConnectivityScreen
+│       │   │   ├── NoConnectivityScreen.css
+│       │   │   └── NoConnectivityScreen.js
+│       │   ├── QuestionCard
+│       │   │   └── QuestionCard.js
+│       │   └── ShareScreen
+│       │       └── ShareScreen.js
+│       ├── index.css
+│       ├── index.js
+│       ├── logo.svg
+│       ├── reportWebVitals.js
+│       └── setupTests.js
+```
