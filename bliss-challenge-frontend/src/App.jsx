@@ -9,6 +9,8 @@ import "./App.css";
 function App() {
   return (
     <div className="App">
+      <NoConnectivityScreen />
+
       <Router>
         <Routes>
           <Route path="/questions/:id" element={<DetailScreen />} />
@@ -16,7 +18,6 @@ function App() {
           <Route path="/no-connectivity" component={NoConnectivityScreen} />
         </Routes>
       </Router>
-      <NoConnectivityScreen />
     </div>
   );
 }

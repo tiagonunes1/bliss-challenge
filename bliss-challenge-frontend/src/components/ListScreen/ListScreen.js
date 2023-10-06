@@ -12,6 +12,7 @@ function ListScreen({ searchParam }) {
   const [loadingMore, setLoadingMore] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [emailInput, setEmailInput] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const searchInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -61,7 +62,9 @@ function ListScreen({ searchParam }) {
   };
 
   const loadMore = () => {
-    setOffset((prevOffset) => prevOffset + 10);
+    if (questionList.length % 10 === 0) {
+      setOffset((prevOffset) => prevOffset + 10);
+    }
   };
 
   const openEmailModal = () => {
@@ -73,34 +76,38 @@ function ListScreen({ searchParam }) {
   };
 
   const shareRequest = async () => {
-    // Check if email is valid before sending the request
     if (validateEmail(emailInput)) {
       try {
         const currentUrl = window.location.href;
+        const urlParts = currentUrl.split("/");
+        urlParts.pop();
+        const filterQuery = `${urlParts.join("/")}/questions?filter=${searchQuery}`;
         const apiUrl = `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/share?destination_email=${encodeURIComponent(
           emailInput
-        )}&content_url=${currentUrl}`;
+        )}&content_url=${filterQuery}`;
 
         const response = await fetch(apiUrl, {
           method: "POST",
         });
 
         if (response.ok) {
-          console.log("Screen shared successfully");
+          console.log(filterQuery);
+          setSuccessMessage("Screen shared successfully");
           closeEmailModal();
         } else {
           console.error("Screen share failed");
+          setSuccessMessage("Screen share failed");
         }
       } catch (error) {
         console.error("Network error:", error);
+        setSuccessMessage("Network error");
       }
     } else {
-      // Handle invalid email input, e.g., show an error message
       console.error("Invalid email address");
+      setSuccessMessage("Invalid email address");
     }
   };
 
-  // Function to validate email format
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -110,19 +117,13 @@ function ListScreen({ searchParam }) {
     question.question.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleRowClick = (selectedQuestion) => {
-    setSelectedQuestion(selectedQuestion);
-  };
-
-  const data = { foo: "bar" };
-
   function handleClickDetail(question) {
     navigate(`/questions/${question.id}`, { state: question });
   }
 
   const handleIntersection = (entries) => {
     const entry = entries[0];
-    if (entry.isIntersecting && !loadingMore) {
+    if (entry.isIntersecting && !loadingMore && filteredQuestions.length > 0) {
       loadMore();
     }
   };
@@ -187,6 +188,12 @@ function ListScreen({ searchParam }) {
         </div>
       )}
 
+      {successMessage && (
+        <p className="success-message">
+          <strong>{successMessage}</strong>
+        </p>
+      )}
+
       <div className="search-bar-container">
         <input
           type="text"
@@ -235,9 +242,7 @@ function ListScreen({ searchParam }) {
 
       {loadingMore && <p>Loading more...</p>}
       {!loadingMore && !questionList.length && <p>No questions found.</p>}
-      {!loadingMore && questionList.length % 10 === 0 && (
-        <p>Scroll down to load more questions.</p>
-      )}
+      {!loadingMore && questionList.length % 10 === 0 && <p> </p>}
 
       {selectedQuestion && <DetailScreen question={selectedQuestion} />}
     </div>

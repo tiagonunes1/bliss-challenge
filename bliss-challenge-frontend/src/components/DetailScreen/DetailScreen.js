@@ -5,6 +5,9 @@ import "./DetailScreen.css";
 function DetailScreen() {
   const [question, setQuestion] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [email, setEmail] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const { id } = useParams();
 
   const fetchQuestion = async () => {
@@ -47,10 +50,23 @@ function DetailScreen() {
     }
   };
 
+  const handleShareClick = () => {
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setSuccessMessage(""); // Clear the success message when the modal is closed
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
   const sendShare = async () => {
     try {
       const currentUrl = window.location.href;
-      const apiUrl = `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/share?destination_email=tiagoalexandrenunes1@gmail.com&content_url=${currentUrl}`;
+      const apiUrl = `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/share?destination_email=${email}&content_url=${currentUrl}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -58,6 +74,8 @@ function DetailScreen() {
 
       if (response.ok) {
         console.log("Screen share was successful");
+        setShowModal(false);
+        setSuccessMessage("Share sent successfully!");
       } else {
         console.error("Screen share failed");
       }
@@ -102,7 +120,7 @@ function DetailScreen() {
             </div>
             <button
               className="share-button-detail"
-              onClick={() => sendShare()}
+              onClick={handleShareClick}
             >
               Share
             </button>
@@ -111,6 +129,30 @@ function DetailScreen() {
           <p className="error-message">Question not found</p>
         )}
       </div>
+
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={handleModalClose}>
+              &times;
+            </span>
+            <h2>Share via Email</h2>
+            <input
+              type="text"
+              placeholder="Enter Email"
+              value={email}
+              onChange={handleEmailChange}
+            />
+            <button onClick={sendShare}>Share</button>
+          </div>
+        </div>
+      )}
+
+      {successMessage && (
+        <div className="success-message">
+          <p>{successMessage}</p>
+        </div>
+      )}
     </div>
   );
 }
