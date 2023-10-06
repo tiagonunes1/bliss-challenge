@@ -8,6 +8,7 @@ function DetailScreen() {
   const [showModal, setShowModal] = useState(false);
   const [email, setEmail] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
   const { id } = useParams();
 
   const fetchQuestion = async () => {
@@ -34,19 +35,41 @@ function DetailScreen() {
 
   const handleVoteClick = async (choice) => {
     try {
-      const apiUrl = `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/questions/${id}/choice/${choice.choice}`;
+      const apiUrl = `http://private-anon-43da49f333-blissrecruitmentapi.apiary-mock.com/questions/${id}`;
 
-      const response = await fetch(apiUrl, {
+      const payload = {
         method: "PUT",
-      });
+        headers: {
+          "Content-Type": "application/json",
+        }, 
+        body: JSON.stringify({
+          id: question.id,
+         question: question.question,
+          image_url: question.image_url,
+          thumb_url: question.thumb_url,
+          published_at: question.published_at,
+          choices: question.choices.map((c) =>
+            c.choice === choice.choice ? { ...c, votes: c.votes + 1 } : c
+          ),
+        }),
+      };
+
+      const response = await fetch(apiUrl, payload);
 
       if (response.ok) {
         fetchQuestion();
+        setSuccessMessage("Vote successful!");
+
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 3000);
       } else {
         console.error("Vote failed");
+        setSuccessMessage("Vote failed!");
       }
     } catch (error) {
       console.error("Network error:", error);
+      setSuccessMessage("Network failed!");
     }
   };
 
@@ -56,7 +79,7 @@ function DetailScreen() {
 
   const handleModalClose = () => {
     setShowModal(false);
-    setSuccessMessage(""); // Clear the success message when the modal is closed
+    setSuccessMessage("");
   };
 
   const handleEmailChange = (e) => {
@@ -103,6 +126,12 @@ function DetailScreen() {
             </div>
             <div className="poll-details">
               <h1 className="poll-title">{question.question}</h1>
+              {successMessage && (
+                <div className="success-message">
+                  <p>{successMessage}</p>
+                </div>
+              )}
+
               <div className="poll-options">
                 {question.choices.map((choice, index) => (
                   <div key={index} className="poll-option">
@@ -118,10 +147,7 @@ function DetailScreen() {
                 ))}
               </div>
             </div>
-            <button
-              className="share-button-detail"
-              onClick={handleShareClick}
-            >
+            <button className="share-button-detail" onClick={handleShareClick}>
               Share
             </button>
           </>
@@ -145,12 +171,6 @@ function DetailScreen() {
             />
             <button onClick={sendShare}>Share</button>
           </div>
-        </div>
-      )}
-
-      {successMessage && (
-        <div className="success-message">
-          <p>{successMessage}</p>
         </div>
       )}
     </div>
