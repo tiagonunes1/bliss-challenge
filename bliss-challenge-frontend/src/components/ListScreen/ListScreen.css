@@ -124,3 +124,26 @@ h2 {
 .email-modal-buttons {
   margin-bottom: 10px;
 }
+
+.clear-search-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clear-search-button svg {
+  width: 15px;
+  height: 15px;
+  stroke: #ccc;
+  transition: stroke 0.3s ease;
+}
+
+.clear-search-button:hover svg {
+  stroke: #f00;
+}

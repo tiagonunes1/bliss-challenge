@@ -10,7 +10,6 @@ function App() {
   return (
     <div className="App">
       <NoConnectivityScreen />
-
       <Router>
         <Routes>
           <Route path="/questions/:id" element={<DetailScreen />} />

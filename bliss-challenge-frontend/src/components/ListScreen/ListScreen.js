@@ -14,6 +14,7 @@ function ListScreen({ searchParam }) {
   const [emailInput, setEmailInput] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const searchInputRef = useRef(null);
+  const [isSearchActive, setIsSearchActive] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,6 +41,7 @@ function ListScreen({ searchParam }) {
     };
 
     fetchQuestions();
+    setIsSearchActive(!!searchQuery);
   }, [offset, searchQuery]);
 
   useEffect(() => {
@@ -81,7 +83,9 @@ function ListScreen({ searchParam }) {
         const currentUrl = window.location.href;
         const urlParts = currentUrl.split("/");
         urlParts.pop();
-        const filterQuery = `${urlParts.join("/")}/questions?filter=${searchQuery}`;
+        const filterQuery = `${urlParts.join(
+          "/"
+        )}/questions?filter=${searchQuery}`;
         const apiUrl = `https://private-anon-4009a38254-blissrecruitmentapi.apiary-mock.com/share?destination_email=${encodeURIComponent(
           emailInput
         )}&content_url=${filterQuery}`;
@@ -145,6 +149,20 @@ function ListScreen({ searchParam }) {
     };
   }, [observer]);
 
+  const clearSearch = () => {
+    setSearchQuery("");
+    setIsSearchActive(false);
+    clearFilterQueryParam();
+  };
+
+  const clearFilterQueryParam = () => {
+    const { search, pathname } = window.location;
+    const urlParams = new URLSearchParams(search);
+    urlParams.delete("filter");
+    const newUrl = `${pathname}?${urlParams}`;
+    window.history.replaceState({}, "", newUrl);
+  };
+
   return (
     <div className="list">
       <h2>Question List</h2>
@@ -169,7 +187,6 @@ function ListScreen({ searchParam }) {
         </svg>
         &nbsp; Share Screen
       </button>
-
       {showEmailModal && (
         <div className="email-modal">
           <div className="email-modal-content">
@@ -204,6 +221,25 @@ function ListScreen({ searchParam }) {
           onChange={handleSearchChange}
           ref={searchInputRef}
         />
+        {isSearchActive && (
+          <button className="clear-search-button" onClick={clearSearch}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-x"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        )}
         <button
           id="searchButton"
           className="search-button"
